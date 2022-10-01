@@ -1,11 +1,15 @@
 from strategy.starter_strategy import StarterStrategy
 from strategy.strategy import Strategy
+<<<<<<< HEAD
 from strategy.alp_strategy import Alp_Strategy
 from strategy.kn_strategy import Kngt_Strategy
 from strategy.alp_strategy_dev import Alp_Strategy_Dev
 from strategy.alp_strategy_a import Alp_Strategy_A
 from strategy.arch_strategy import Arch_Strategy
 #from strategy.ma_strategy import Wzrd_Strategy
+=======
+
+>>>>>>> slink_up
 """Return the strategy that your bot should use.
 
 :param playerIndex: A player index that can be used if necessary.
@@ -13,6 +17,7 @@ from strategy.arch_strategy import Arch_Strategy
 :returns: A Strategy object.
 """
 def get_strategy(player_index: int) -> Strategy:  
+<<<<<<< HEAD
   x = player_index
   test = True
   if (x == 0) & (test):
@@ -25,3 +30,7 @@ def get_strategy(player_index: int) -> Strategy:
     return Arch_Strategy()
   else:
     return Kngt_Strategy()#Alp_Strategy()
+=======
+  
+  return StarterStrategy()
+>>>>>>> slink_up
