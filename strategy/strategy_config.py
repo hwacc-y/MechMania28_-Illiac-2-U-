@@ -3,7 +3,8 @@ from strategy.strategy import Strategy
 from strategy.alp_strategy import Alp_Strategy
 from strategy.kn_strategy import Kngt_Strategy
 from strategy.alp_strategy_dev import Alp_Strategy_Dev
-#from strategy.ar_strategy import Arch_Strategy
+from strategy.alp_strategy_a import Alp_Strategy_A
+from strategy.arch_strategy import Arch_Strategy
 #from strategy.ma_strategy import Wzrd_Strategy
 """Return the strategy that your bot should use.
 
@@ -13,11 +14,14 @@ from strategy.alp_strategy_dev import Alp_Strategy_Dev
 """
 def get_strategy(player_index: int) -> Strategy:  
   x = player_index
-  if (x == 0):
-    return Alp_Strategy_Dev() 
-  if (x == 1):
+  test = True
+  if (x == 0) & (test):
+    return Alp_Strategy_A() 
+  if (x == 1) & (test):
     return Alp_Strategy()
-  if (x == 2):
+  if (x == 2) & (test):
     return Kngt_Strategy()
-  if (x == 3):
-    return Alp_Strategy()
+  if (x == 3) & (test):
+    return Arch_Strategy()
+  else:
+    return Alp_Strategy_A()#Kngt_Strategy()

@@ -21,8 +21,6 @@ def findClosetCenter(position: Position):
             target_index = i
     return center[i]
             
-            
-        
 class Alp_Strategy(Strategy):
     def strategy_initialize(self, my_player_index: int):
         return game.character_class.CharacterClass.WIZARD
