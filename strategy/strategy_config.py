@@ -16,7 +16,7 @@ def get_strategy(player_index: int) -> Strategy:
   x = player_index
   test = True
   if (x == 0) & (test):
-    return Alp_Strategy_A() 
+    return Alp_Strategy() 
   if (x == 1) & (test):
     return Alp_Strategy()
   if (x == 2) & (test):
@@ -24,4 +24,4 @@ def get_strategy(player_index: int) -> Strategy:
   if (x == 3) & (test):
     return Arch_Strategy()
   else:
-    return Alp_Strategy_A()#Kngt_Strategy()
+    return Kngt_Strategy()#Alp_Strategy()
