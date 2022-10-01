@@ -26,3 +26,4 @@ def get_strategy(player_index: int) -> Strategy:
     return Arch_Strategy()
   else:
     return fav
+
