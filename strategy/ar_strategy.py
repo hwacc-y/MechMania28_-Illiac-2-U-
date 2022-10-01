@@ -36,7 +36,7 @@ class Alp_Strategy(Strategy):
                 closest_distance = dist
         
         #if(chosen_opponent is None): 
-        return Position(4,4)
+        return Position(4,5)
 
     def attack_action_decision(self, game_state: GameState, my_player_index: int) -> int:
         return Random().randint(0, 3)
