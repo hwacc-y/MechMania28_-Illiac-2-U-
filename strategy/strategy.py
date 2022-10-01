@@ -11,7 +11,7 @@ class Strategy(object):
     """
     @abstractmethod
     def strategy_initialize(self, my_player_index: int) -> None:
-        pass
+        return game.character_class.CharacterClass.WIZARD
 
     """Each turn, decide if you should use the item you're holding. Do not try to use the
     legendary Item.None!
