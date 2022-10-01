@@ -6,10 +6,15 @@ import util.utility as util
 from game.position import Position
 from strategy.strategy import Strategy
 import math
+import config
 from typing import List
  
 center = [Position(4,4),Position(4,5),Position(5,4),Position(5,5)]
  
+def in_bounds(p: Position) -> bool:
+    #  Assume board runs from 0 to BOARD_SIZE - 1
+    return ((p.x >= 0) and (p.x < config.BOARD_SIZE) and (p.y >= 0) and (p.y < config.BOARD_SIZE))
+
 def manhattan_distance(p1: Position, p2: Position) -> int:
     return abs(p1.x - p2.x) + abs(p1.y - p2.y)
  
@@ -40,7 +45,7 @@ def get_reachable_tiles(my_position: Position, my_speed: int) -> List[tuple]:
     reachable_list = []
     for x in range(-my_speed, my_speed+1):
         for y in range(-my_speed, my_speed+1):
-            if (chebyshev_distance(my_position, Position(x,y))  and (x != 0 and y != 0) and util.in_bounds(Position(x,y))):
+            if chebyshev_distance(my_position, Position(x,y)) and in_bounds(Position(x,y)):
                 reachable_list.append((my_position.x + x, my_position.y + y))
                
     return reachable_list
@@ -88,27 +93,28 @@ class Arch_Strategy(Strategy):
                 #opponents_position.append(player_list[player_index].position)
        
         possible_moves = get_reachable_tiles(my_position, my_speed)
-        calc = []
         biggest_enemy_distance = 0
+        position = ()
  
-        for (x,y) in possible_moves:
-            single_enemy_distance = 0
+        for temp in possible_moves:
+            total_enemy_distance = 0
             for o in opponents:
-                single_enemy_distance  += manhattan_distance(Position(x,y), o.position)
- 
-            if manhattan_distance(Position(x,y), o.position) > biggest_enemy_distance and findClosestDistance(my_position) <= my_speed:
-                biggest_enemy_distance = manhattan_distance(Position(x,y), o.position)
- 
-            calc.append(manhattan_distance(Position(x,y), o.position))
- 
- 
+                total_enemy_distance  += manhattan_distance(Position(temp[0], temp[1]), o.position)
+
+            if total_enemy_distance > biggest_enemy_distance and findClosestDistance(Position(temp[0], temp[1])) <= my_speed:
+                biggest_enemy_distance = total_enemy_distance
+                position = Position(temp[0], temp[1])
+            
         #center (4,4),(5,4),(4,5)(5,5)
         if(my_coin >= 8):
             return sp_arr[my_player_index]
  
         chosen_opponent = None
         if(chosen_opponent is None):
-            return findClosestCenter(my_position)
+            if findClosestDistance <= my_speed:
+                return findClosestCenter(my_position)
+            else:
+                return position
         else:
             return chosen_opponent.position
  

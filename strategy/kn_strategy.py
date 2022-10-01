@@ -32,10 +32,10 @@ def find_closet_center(position: Position) -> Position:
 def is_center(my_position: Position):
     x = my_position.x
     y = my_position.y
-    if((x != 4 and y != 4) and (x != 4 and y != 5) and (x != 5 and y != 4) and (x != 5 and y != 5)):
-        return False
-    else:
-        return True
+    for p in center:
+        if(x == p.x and y == p.y):
+            return True
+    return False
  
 def get_tiles_in_attact_range(my_position: Position, my_range: int) -> List[tuple]:
     reachable_list = []
@@ -50,7 +50,7 @@ def get_reachable_tiles(my_position: Position, my_speed: int) -> List[tuple]:
     reachable_list = []
     for x in range(-my_speed, my_speed+1):
         for y in range(-my_speed, my_speed+1):
-            if (chebyshev_distance(my_position, Position(x,y))  and (x != 0 and y != 0) and util.in_bounds(Position(x,y))):
+            if (manhattan_distance(my_position, Position(x,y)) and util.in_bounds(Position(x,y))):
                 reachable_list.append((my_position.x + x, my_position.y + y))
                
     return reachable_list
@@ -61,19 +61,25 @@ class Kngt_Strategy(Strategy):
         return game.character_class.CharacterClass.KNIGHT
  
     def move_action_decision(self, game_state: GameState, my_player_index: int) -> Position:
-        sp_arr = [Position(0,0),Position(9,0),Position(9,9),Position(0,9)]
+        sp_arr = [Position(0,0),Position(9,0),Position(0,9),Position(9,9)]
         player_list = game_state.player_state_list
         my_position = player_list[my_player_index].position
         my_coin = player_list[my_player_index].gold
         my_health = player_list[my_player_index].health
         my_range = player_list[my_player_index].stat_set.range
         my_item = player_list[my_player_index].item
+
+        archer_count = 0
+        for player_index in range(len(game_state.player_state_list)):
+            if(player_index != my_player_index and game_state.player_state_list[player_index].character_class == game.character_class.CharacterClass.ARCHER):
+                archer_count += 1
+        if(archer_count < 2):
+            if(((my_coin >= 8 and my_health <= 3) or my_coin >= 8) and my_item == Item.NONE):
+                return sp_arr[my_player_index]
        
-        if(((my_coin >= 8 and my_health <= 3) or my_coin >= 8) and my_item == Item.NONE):
-            return sp_arr[my_player_index]
-       
-        if(my_health <= 3 and my_coin < 8 and my_item == Item.PROCRUSTEAN_IRON):
-            return sp_arr[my_player_index]
+            if(my_health <= 3 and my_coin < 8 and my_item == Item.PROCRUSTEAN_IRON):
+                return sp_arr[my_player_index]
+        
        
         if(is_center(my_position)):
             return my_position                  
@@ -104,8 +110,11 @@ class Kngt_Strategy(Strategy):
                     break
                 else:
                     chosen_opponent = o
-       
-        return my_player_index
+        if (chosen_opponent is None):
+            return my_player_index
+        else:
+            return player_list.index(chosen_opponent)
+            
     def buy_action_decision(self, game_state: GameState, my_player_index: int) -> Item:
         player_list = game_state.player_state_list
         my_coin = player_list[my_player_index].gold
@@ -115,11 +124,4 @@ class Kngt_Strategy(Strategy):
             return Item.NONE
  
     def use_action_decision(self, game_state: GameState, my_player_index: int) -> bool:
-        archer_count = 0
-        for player_index in range(len(game_state.player_state_list)):
-            if(player_index != my_player_index and game_state.player_state_list[player_index].character_class == game.character_class.CharacterClass.ARCHER):
-                archer_count += 1
-        if(archer_count >= 2):
-            return False
-        else:
-            return True
+        return True

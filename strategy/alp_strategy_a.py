@@ -52,7 +52,7 @@ class Alp_Strategy_A(Strategy):
         my_position = player_list[my_player_index].position
         player = player_list[my_player_index]
         opponents = []
-        sp_arr = [Position(0,0), Position(9,0), Position(9,9), Position(0,9)]
+        sp_arr = [Position(0,0), Position(9,0), Position(0,9), Position(9,9)]
        
         for player_index in range(len(player_list)):
             if(player_index != my_player_index):
@@ -74,17 +74,18 @@ class Alp_Strategy_A(Strategy):
         # if player.health <= round(player.stat_set.max_health/3):
         #     return sp_arr[my_player_index]
  
-        # if player.gold >= 8 and player.health < 3:
-        #     return sp_arr[my_player_index]
-        # elif chosen_opponent is None:            
-        #     return findClosetCenter(my_position)
-        # else:
-        #     return o.position
+        if player.gold >= 8 and player.health < 3:
+            return sp_arr[my_player_index]
+
+        elif chosen_opponent is None:            
+            return findClosetCenter(my_position)
+        else:
+            return o.position
             # return findClosetCenter(my_position)
  
              
-        if chosen_opponent is not None:
-            return findClosetCenter(my_position)
+        # if chosen_opponent is not None:
+        #     return findClosetCenter(my_position)
        
  
     def attack_action_decision(self, game_state: GameState, my_player_index: int) -> int:
