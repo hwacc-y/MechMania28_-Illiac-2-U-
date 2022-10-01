@@ -15,6 +15,7 @@ from strategy.arch_strategy import Arch_Strategy
 def get_strategy(player_index: int) -> Strategy:  
   x = player_index
   test = True
+  fav = Arch_Strategy()
   if (x == 0) & (test):
     return Alp_Strategy() 
   if (x == 1) & (test):
@@ -24,4 +25,4 @@ def get_strategy(player_index: int) -> Strategy:
   if (x == 3) & (test):
     return Arch_Strategy()
   else:
-    return Kngt_Strategy()#Alp_Strategy()
+    return fav

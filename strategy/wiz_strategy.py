@@ -27,7 +27,7 @@ def find_closet_center(position: Position) -> Position:
         elif(manhattan_distance(position,center[i]) < closet_dist):
             closet_dist = manhattan_distance(position,center[i])
             target_index = i
-    return center[i]
+    return center[target_index]
  
 def is_center(my_position: Position):
     x = my_position.x
@@ -54,11 +54,10 @@ def get_reachable_tiles(my_position: Position, my_speed: int) -> List[tuple]:
                 reachable_list.append((my_position.x + x, my_position.y + y))
                
     return reachable_list
-   
-     
-class Kngt_Strategy(Strategy):
+
+class Wiz_Strategy(Strategy):
     def strategy_initialize(self, my_player_index: int):
-        return game.character_class.CharacterClass.KNIGHT
+        return game.character_class.CharacterClass.WIZARD
  
     def move_action_decision(self, game_state: GameState, my_player_index: int) -> Position:
         sp_arr = [Position(0,0),Position(9,0),Position(9,9),Position(0,9)]

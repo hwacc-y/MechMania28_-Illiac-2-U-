@@ -5,6 +5,7 @@ from game.item import Item
 import util.utility as util
 from game.position import Position
 from strategy.strategy import Strategy
+from game.player_state import PlayerState
 import math
 import config
 from typing import List
@@ -45,11 +46,21 @@ def get_reachable_tiles(my_position: Position, my_speed: int) -> List[tuple]:
     reachable_list = []
     for x in range(-my_speed, my_speed+1):
         for y in range(-my_speed, my_speed+1):
-            if chebyshev_distance(my_position, Position(x,y)) and in_bounds(Position(x,y)):
+            if manhattan_distance(my_position, Position(x,y)) and in_bounds(Position(x,y)):
                 reachable_list.append((my_position.x + x, my_position.y + y))
                
     return reachable_list
  
+def get_closest_opponent_in_attackRange(opponents_list: List[PlayerState], my_position: Position, my_attack_range: int) -> PlayerState:
+    chosen_opponent = None
+    dist = 100
+    for o in opponents_list:
+        temp_dist = chebyshev_distance(my_position, o.position)
+        if( temp_dist < dist and temp_dist < my_attack_range):
+            chosen_opponent = o
+            dist = temp_dist
+    return chosen_opponent
+
 class Arch_Strategy(Strategy):
  
     # #Can you kill anyone in one hit including moves?
@@ -66,7 +77,7 @@ class Arch_Strategy(Strategy):
  
     #     my_position = player_list[my_player_index].position
     #     chosen_opponent = None
-    #     for o in opponents:
+    #     for o in opponents:ss
     #         dist_to_opp = max(abs(my_position.x - o.position.x), abs(my_position.y - o.position.y))
     #         speed/2
     #         closest_square = abs(my_position.x - o.position.x) + abs(my_position.y - o.position.y)
@@ -74,7 +85,7 @@ class Arch_Strategy(Strategy):
     #             return player_list.index(o)
  
     def strategy_initialize(self, my_player_index: int):
-        return game.character_class.CharacterClass.ARCHER
+        return game.character_class.CharacterClass.KNIGHT
  
     def move_action_decision(self, game_state: GameState, my_player_index: int) -> Position:
         attack_range = 3
@@ -101,7 +112,7 @@ class Arch_Strategy(Strategy):
             for o in opponents:
                 total_enemy_distance  += manhattan_distance(Position(temp[0], temp[1]), o.position)
 
-            if total_enemy_distance > biggest_enemy_distance and findClosestDistance(Position(temp[0], temp[1])) <= my_speed:
+            if total_enemy_distance > biggest_enemy_distance and findClosestDistance(Position(temp[0], temp[1])) == my_speed:
                 biggest_enemy_distance = total_enemy_distance
                 position = Position(temp[0], temp[1])
             
@@ -111,29 +122,48 @@ class Arch_Strategy(Strategy):
  
         chosen_opponent = None
         if(chosen_opponent is None):
-            if findClosestDistance <= my_speed:
+            if findClosestDistance(my_position) <= my_speed:
                 return findClosestCenter(my_position)
             else:
                 return position
         else:
             return chosen_opponent.position
  
- 
     def attack_action_decision(self, game_state: GameState, my_player_index: int) -> int:
-        return 0
+        opponents = []
+        player_list = game_state.player_state_list
+        player = game_state.player_state_list[my_player_index]
+ 
+        for player_index in range(len(player_list)):
+            if(player_index != my_player_index):
+                opponents.append(player_list[player_index])
+       
+        opponent = get_closest_opponent_in_attackRange(opponents, player_list[my_player_index].position, player_list[my_player_index].stat_set.range)
+ 
+        if opponent is not None:
+            distance = chebyshev_distance(opponent.position, player.position)
+ 
+            if distance <= player.stat_set.range:
+                return player_list.index(opponent)
+ 
+        return my_player_index
  
     def buy_action_decision(self, game_state: GameState, my_player_index: int) -> Item:
         player_list = game_state.player_state_list
         my_coin = player_list[my_player_index].gold
         if(my_coin >= 8):
-            return Item.SPEED_POTION
+            return Item.RALLY_BANNER
         else:
             return Item.NONE
  
     def use_action_decision(self, game_state: GameState, my_player_index: int) -> bool:
-        player_list = game_state.player_state_list
-        my_position = player_list[my_player_index].position
-        if findClosestDistance(my_position) <= 6 and findClosestDistance(my_position) > 4:
-            return True
-        else:
-            return False
+        return True
+
+        # player_list = game_state.player_state_list
+        # my_position = player_list[my_player_index].position
+        # if findClosestDistance(my_position) <= 6 and findClosestDistance(my_position) > 4:
+        #     return True
+        # else:
+        #     return False
+
+        
