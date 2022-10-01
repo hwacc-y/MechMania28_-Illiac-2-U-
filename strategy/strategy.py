@@ -1,7 +1,7 @@
 from abc import abstractmethod
 from game.game_state import GameState
 from game.item import Item
-
+#from game.item import Item 
 from game.position import Position
 
 class Strategy(object):
@@ -12,7 +12,6 @@ class Strategy(object):
     @abstractmethod
     def strategy_initialize(self, my_player_index: int) -> None:
         return game.character_class.CharacterClass.WIZARD
-
     """Each turn, decide if you should use the item you're holding. Do not try to use the
     legendary Item.None!
 
@@ -23,8 +22,9 @@ class Strategy(object):
     """
     @abstractmethod
     def use_action_decision(self, game_state: GameState, my_player_index: int) -> bool:
+        #if ( == ):
+            # tool
         pass
-
     """Each turn, pick a position on the board that you want to move towards. Be careful not to
     fall out of the board!
 
@@ -35,8 +35,8 @@ class Strategy(object):
     """
     @abstractmethod
     def move_action_decision(self, game_state: GameState, my_player_index: int) -> Position:
+        #if (distance < 2):
         pass
-
     """Each turn, pick a player you would like to attack. Feel free to be a pacifist and attack no
     one but yourself.
 
@@ -56,8 +56,11 @@ class Strategy(object):
     :param myPlayerIndex: You may find out which player on the board you are.
 
     :returns: A game.Item object.
+
     """
     @abstractmethod
     def buy_action_decision(self, game_state: GameState, my_player_index: int) -> Item:
-        pass
+        pass 
+        #if ( != ):
+            #return "not buy"
 
