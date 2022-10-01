@@ -7,12 +7,12 @@ from game.position import Position
 from strategy.strategy import Strategy
 import math
 
-class Alp_Strategy(Strategy):
+class Kngt_Strategy(Strategy):
     def strategy_initialize(self, my_player_index: int):
-        return game.character_class.CharacterClass.WIZARD
+        return game.character_class.CharacterClass.KNIGHT
 
     def move_action_decision(self, game_state: GameState, my_player_index: int) -> Position:
-        attack_range = 2
+        attack_range = 1
         player_list = game_state.player_state_list
         my_position = player_list[my_player_index].position
         opponents = []
@@ -36,7 +36,7 @@ class Alp_Strategy(Strategy):
                 closest_distance = dist
         
         #if(chosen_opponent is None): 
-        return Position(5,5)
+        return Position(5,4)
 
     def attack_action_decision(self, game_state: GameState, my_player_index: int) -> int:
         return Random().randint(0, 3)

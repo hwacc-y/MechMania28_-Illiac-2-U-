@@ -7,9 +7,9 @@ from game.position import Position
 from strategy.strategy import Strategy
 import math
 
-class Alp_Strategy(Strategy):
+class Wzrd_Strategy(Strategy):
     def strategy_initialize(self, my_player_index: int):
-        return game.character_class.CharacterClass.ARCHER
+        return game.character_class.CharacterClass.WIZARD
 
     def move_action_decision(self, game_state: GameState, my_player_index: int) -> Position:
         attack_range = 2
@@ -36,7 +36,7 @@ class Alp_Strategy(Strategy):
                 closest_distance = dist
         
         #if(chosen_opponent is None): 
-        return Position(4,5)
+        return Position(5,5)
 
     def attack_action_decision(self, game_state: GameState, my_player_index: int) -> int:
         return Random().randint(0, 3)
