@@ -37,7 +37,7 @@ def is_center(my_position: Position):
             return True
     return False
  
-def get_tiles_in_attact_range(my_position: Position, my_range: int) -> List[tuple]:
+def get_tiles_in_attack_range(my_position: Position, my_range: int) -> List[tuple]:
     reachable_list = []
     for x in range(-my_range, my_range+1):
         for y in range(-my_range, my_range+1):
@@ -55,6 +55,8 @@ def get_reachable_tiles(my_position: Position, my_speed: int) -> List[tuple]:
                
     return reachable_list
 
+#def check_possible_attack_next_turn(game_state: GameState):
+    
 class Wiz_Strategy(Strategy):
     def strategy_initialize(self, my_player_index: int):
         return game.character_class.CharacterClass.WIZARD
@@ -66,23 +68,38 @@ class Wiz_Strategy(Strategy):
         my_coin = player_list[my_player_index].gold
         my_health = player_list[my_player_index].health
         my_range = player_list[my_player_index].stat_set.range
+        my_speed = player_list[my_player_index].stat_set.speed
         my_item = player_list[my_player_index].item
-
-        archer_count = 0
-        for player_index in range(len(game_state.player_state_list)):
-            if(player_index != my_player_index and game_state.player_state_list[player_index].character_class == game.character_class.CharacterClass.ARCHER):
-                archer_count += 1
-        if(archer_count < 2):
-            if(((my_coin >= 8 and my_health <= 3) or my_coin >= 8) and my_item == Item.NONE):
-                return sp_arr[my_player_index]
+        
+        if(((my_coin >= 5 and my_health <= 3) or my_coin >= 8) and my_item == Item.NONE):
+            return sp_arr[my_player_index]
        
-            if(my_health <= 3 and my_coin < 8 and my_item == Item.PROCRUSTEAN_IRON):
-                return sp_arr[my_player_index]
+        opponents = []
+        
+        for player_index in range(len(player_list)):
+            if(player_index != my_player_index):
+                opponents.append(player_list[player_index])
         
        
         if(is_center(my_position)):
-            return find_closet_center(my_position)                  
+            if(my_position.x == 4 and my_position.y == 4):
+                return Position(5,5)    
+            elif(my_position.x == 4 and my_position.y == 5):
+                return Position(5,4) 
+            elif(my_position.x == 5 and my_position.y == 4):
+                return Position(4,5) 
+            elif(my_position.x == 5 and my_position.y == 5):
+                return Position(4,4)         
+            else:
+                 my_position                 
         else:
+            attacked_tiles = []
+            reachable_tiles = get_reachable_tiles(my_position, my_speed)
+            for (x,y) in reachable_tiles:
+                for o in opponents:
+                if(chebyshev_distance((Position(x,y),):
+                    
+                    
             return find_closet_center(my_position)
        
     def attack_action_decision(self, game_state: GameState, my_player_index: int) -> int:
