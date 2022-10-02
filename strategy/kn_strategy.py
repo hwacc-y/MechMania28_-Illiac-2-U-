@@ -27,7 +27,7 @@ def find_closet_center(position: Position) -> Position:
         elif(manhattan_distance(position,center[i]) < closet_dist):
             closet_dist = manhattan_distance(position,center[i])
             target_index = i
-    return center[i]
+    return center[target_index]
  
 def is_center(my_position: Position):
     x = my_position.x
@@ -69,20 +69,21 @@ class Kngt_Strategy(Strategy):
         my_range = player_list[my_player_index].stat_set.range
         my_item = player_list[my_player_index].item
 
-        archer_count = 0
-        for player_index in range(len(game_state.player_state_list)):
-            if(player_index != my_player_index and game_state.player_state_list[player_index].character_class == game.character_class.CharacterClass.ARCHER):
-                archer_count += 1
-        if(archer_count < 2):
-            if(((my_coin >= 8 and my_health <= 3) or my_coin >= 8) and my_item == Item.NONE):
-                return sp_arr[my_player_index]
        
-            if(my_health <= 3 and my_coin < 8 and my_item == Item.PROCRUSTEAN_IRON):
-                return sp_arr[my_player_index]
-        
-       
+        if((my_coin >= 8 and my_health <= 3) and my_item == Item.NONE):
+            return sp_arr[my_player_index]
+    
         if(is_center(my_position)):
-            return find_closet_center(my_position)                  
+            if(my_position.x == 4 and my_position.y == 4):
+                return Position(5,5)    
+            elif(my_position.x == 4 and my_position.y == 5):
+                return Position(5,4) 
+            elif(my_position.x == 5 and my_position.y == 4):
+                return Position(4,5) 
+            elif(my_position.x == 5 and my_position.y == 5):
+                return Position(4,4)         
+            else:
+                 my_position
         else:
             return find_closet_center(my_position)
        
@@ -103,11 +104,11 @@ class Kngt_Strategy(Strategy):
                 if(o.stat_set.damage >= my_health and my_damage >= o.health):
                     chosen_opponent = o
                     return player_list.index(chosen_opponent)
-                    break
+
                 elif(my_damage >= o.health):
                     chosen_opponent = o
                     return player_list.index(chosen_opponent)
-                    break
+
                 else:
                     chosen_opponent = o
         if (chosen_opponent is None):
@@ -118,10 +119,11 @@ class Kngt_Strategy(Strategy):
     def buy_action_decision(self, game_state: GameState, my_player_index: int) -> Item:
         player_list = game_state.player_state_list
         my_coin = player_list[my_player_index].gold
-        if(my_coin >= 8):
-            return Item.PROCRUSTEAN_IRON
-        else:
-            return Item.NONE
+        
+        for player_index in range(len(game_state.player_state_list)):
+            if(player_index != my_player_index and game_state.player_state_list[player_index].character_class == game.character_class.CharacterClass.ARCHER):
+                return Item.HUNTER_SCOPE
+        return Item.PROCRUSTEAN_IRON
  
     def use_action_decision(self, game_state: GameState, my_player_index: int) -> bool:
         return True

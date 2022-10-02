@@ -152,10 +152,6 @@ def parse_json_as_game_state(data: str) -> GameState:
     player_state.gold = player_state_dict['gold']
     player_state.score = player_state_dict['score']
     player_state.health = player_state_dict['health']
-<<<<<<< HEAD
-
-=======
->>>>>>> slink_up
     player_state.item = Item[player_state_dict['item']]
 
     stat_set_dict = player_state_dict['stat_set']
