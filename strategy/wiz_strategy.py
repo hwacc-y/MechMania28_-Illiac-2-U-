@@ -95,9 +95,9 @@ class Wiz_Strategy(Strategy):
         else:
             attacked_tiles = []
             reachable_tiles = get_reachable_tiles(my_position, my_speed)
-            for (x,y) in reachable_tiles:
-                for o in opponents:
-                if(chebyshev_distance((Position(x,y),):
+            #for (x,y) in reachable_tiles:
+                #for o in opponents:
+                    #if(chebyshev_distance((Position(x,y),):
                     
                     
             return find_closet_center(my_position)
