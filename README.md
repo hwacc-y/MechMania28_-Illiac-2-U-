@@ -13,18 +13,18 @@ Code Req:
 Java >= 11  
 Node.js
 Python >= 3.8
-----------------------
 pip install jsonpickle
-----------------------
+#--------------------------------------------------------------------------#
 First run the Engine.jar file from (https://github.com/MechMania-28/Engine)
 Next run the build.py file 
 Then run the start-4-python-bots.bat/.sh file
 After that the engineer should output a .json file in a folder called gamelogs, which is located in the same directory as Engine.jar.
 Run the resulting JSON file in the visualizer (https://github.com/MechMania-28/Visualizer) to render the results.
----------------------------------------------------------------------------
+#---------------------------------------------------------------------------#
 Tips:
 I configured the strategy_config.py file so that it can test out multiple strategies against each other during tests. If you want the engine to run the game with 4 bots running the same strategy just make test = false and return the desired strat function in the return statement under else.
----------------------------------------------------------------------------
+#---------------------------------------------------------------------------#
+
 # ---------------------------- #
 # --------CURRENT WORK-------- #
 # ---------------------------- #
